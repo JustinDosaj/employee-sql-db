@@ -2,11 +2,11 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import "./db";
-import employeeRoutes from './routes/employee.routes';
+import employeeRoutes from './routes/employees.routes';
 
 
 dotenv.config()
-const app: Application = express();
+export const app: Application = express();
 
 app.use(express.json())
 app.use(cors());
