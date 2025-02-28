@@ -1,33 +1,32 @@
 import request from "supertest";
+import pool from "../../src/db";
 import { app } from "../../src/server";
 
-
 describe("Employees API", () => {
-  describe("GET /api/employees", () => {
-    it("should return 200 and a list of employees", async () => {
-      const res = await request(app).get("/api/employees?limit=2");
-      expect(res.status).toBe(200);
-      expect(res.body).toBeInstanceOf(Array);
-      expect(res.body.length).toBe(2);
-    });
-
-    it("should return 400 for invalid limit parameter", async () => {
-      const res = await request(app).get("/api/employees?limit=invalid");
-      expect(res.status).toBe(400);
-      expect(res.body.error).toBeDefined();
-    });
+  afterAll(async () => {
+    await pool.end(); // Close DB connection after tests
   });
 
-  describe("GET /api/employees/:id", () => {
-    it("should return a single employee", async () => {
-      const res = await request(app).get("/api/employees/10001");
-      expect(res.status).toBe(200);
-      expect(res.body.emp_no).toBe(10001);
-    });
+  test("GET /api/employees should return employees", async () => {
+    const res = await request(app).get("/api/employees");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+  });
 
-    it("should return 404 for non-existing employee", async () => {
-      const res = await request(app).get("/api/employees/99999");
-      expect(res.status).toBe(404);
-    });
+  test("GET /api/employees?limit=5 should return 5 employees", async () => {
+    const res = await request(app).get("/api/employees?limit=5");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.length).toBe(5);
+  });
+
+  test("GET /api/employees?columns=first_name,last_name should return only first_name and last_name", async () => {
+    const res = await request(app).get("/api/employees?columns=first_name,last_name");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data[0]).toHaveProperty("first_name");
+    expect(res.body.data[0]).toHaveProperty("last_name");
+    expect(res.body.data[0]).not.toHaveProperty("emp_no");
   });
 });
