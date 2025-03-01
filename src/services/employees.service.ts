@@ -8,17 +8,14 @@ interface GetEmployeeProps {
 
 export const getAllEmployees = async ({ limit, columns = [], filters = {} }: GetEmployeeProps) => {
 
-    const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
-    const selectedColumns = columns.length > 0 ? columns.filter(col => allowedColumns.includes(col)) : allowedColumns;
-
-    let query = `SELECT ${selectedColumns.join(", ")} FROM employees`;
+    let query = `SELECT ${columns.join(", ")} FROM employees`;
     let queryParams: any[] = [];
 
     try {
         // Build WHERE conditions dynamically
         // Return parameterized query
         const conditions = Object.keys(filters)
-            .filter((key) => allowedColumns.includes(key)) // Ensure filter keys are valid
+            .filter((key) => columns.includes(key)) // Ensure filter keys are valid
             .map((key) => {
                 queryParams.push(filters[key]);
                 return `${key} = ?`;

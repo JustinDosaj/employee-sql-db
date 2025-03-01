@@ -4,8 +4,11 @@ import { getAllEmployees } from "../services/employees.service";
 export const getEmployees = async (req: Request, res: Response) => {
     try {
         const limit = parseInt(req.query.limit as string) || 10;
-        const columns = req.query.columns ? (req.query.columns as string).split(",") : [];
+        const reqColumns = req.query.columns ? (req.query.columns as string).split(",") : [];
         
+        const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
+        const columns = reqColumns.length > 0 ? reqColumns.filter(col => allowedColumns.includes(col)) : allowedColumns;
+
         // Extract filters dynamically
         const allowedFilters = ["gender", "first_name", "last_name", "hire_date"];
         const filters: { [key: string]: string } = {};
