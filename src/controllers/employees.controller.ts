@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { getAllEmployees } from "../services/employees.service";
 
-export const getEmployees = async (req: Request, res: Response) => {
+export const EmployeesController = async (req: Request, res: Response) => {
+
+    const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
+    const allowedFilters = ["gender", "first_name", "last_name", "hire_date"];
+    
     try {
         const limit = parseInt(req.query.limit as string) || 10;
         const reqColumns = req.query.columns ? (req.query.columns as string).split(",") : [];
-        
-        const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
-        const columns = reqColumns.length > 0 ? reqColumns.filter(col => allowedColumns.includes(col)) : allowedColumns;
-
-        // Extract filters dynamically
-        const allowedFilters = ["gender", "first_name", "last_name", "hire_date"];
         const filters: { [key: string]: string } = {};
+                
+        const columns = reqColumns.length > 0 ? reqColumns.filter(col => allowedColumns.includes(col)) : allowedColumns;
 
         allowedFilters.forEach((filter) => {
             if (req.query[filter]) {

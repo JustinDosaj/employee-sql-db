@@ -19,7 +19,7 @@ export const getAllEmployees = async ({ limit, columns = [], filters = {} }: Get
             .map((key) => {
                 queryParams.push(filters[key]);
                 return `${key} = ?`;
-            });
+        });
         
         // Check conditions from filters and add to query statement
         // Statement Example : `WHERE <gender = M AND first_name = John ...>`
