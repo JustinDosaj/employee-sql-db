@@ -7,15 +7,14 @@ interface GetEmployeeProps {
 }
 
 export const getAllEmployees = async ({ limit, columns = [], filters = {} }: GetEmployeeProps) => {
+
+    const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
+    const selectedColumns = columns.length > 0 ? columns.filter(col => allowedColumns.includes(col)) : allowedColumns;
+
+    let query = `SELECT ${selectedColumns.join(", ")} FROM employees`;
+    let queryParams: any[] = [];
+
     try {
-        const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
-        const selectedColumns = columns.length > 0 
-            ? columns.filter(col => allowedColumns.includes(col)) 
-            : allowedColumns;
-
-        let query = `SELECT ${selectedColumns.join(", ")} FROM employees`;
-        let queryParams: any[] = [];
-
         // Build WHERE conditions dynamically
         // Return parameterized query
         const conditions = Object.keys(filters)
@@ -39,6 +38,7 @@ export const getAllEmployees = async ({ limit, columns = [], filters = {} }: Get
         // queryParams holds the values to be inserted into the query
         const [rows] = await pool.query(query, queryParams);
         return rows;
+        
     } catch (error) {
         console.error("Database query error:", error);
         throw new Error("Error fetching employees");
