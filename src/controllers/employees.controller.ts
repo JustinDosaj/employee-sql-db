@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
-import { getAllEmployees } from "../services/employees.service";
+import { getFilteredEmployees } from "../services/employees.service";
+import { getEmployee } from "../services/employees.service";
 
-export const EmployeesController = async (req: Request, res: Response) => {
+// Get Employee by filter 
+export const getEmployees = async (req: Request, res: Response) => {
 
     const allowedColumns = ["emp_no", "birth_date", "first_name", "last_name", "gender", "hire_date"];
-    const allowedFilters = ["gender", "first_name", "last_name", "hire_date"];
+    const allowedFilters = ["gender", "first_name", "last_name", "hire_date", "emp_no"];
     
     try {
         const limit = parseInt(req.query.limit as string) || 10;
@@ -19,7 +21,7 @@ export const EmployeesController = async (req: Request, res: Response) => {
             }
         });
 
-        const employees = await getAllEmployees({ limit, columns, filters });
+        const employees = await getFilteredEmployees({ limit, columns, filters });
         res.status(200).json({ success: true, data: employees });
 
     } catch (error) {
@@ -27,3 +29,21 @@ export const EmployeesController = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, message: "Error fetching employees" });
     }
 };
+
+// Get Employee by id with URI paramter /employee/:id
+export const getEmployeeById = async (req: Request, res: Response) => {
+
+    try {
+
+        const id = parseInt(req.params.id as string)
+        console.log(id)
+        const employee = await getEmployee(id)
+
+        res.status(200).json({success: true, data: employee})
+
+    } catch (error) {
+        res.status(500).json({success: false, message: "Failed to get employee by ID"})
+    }
+
+
+}

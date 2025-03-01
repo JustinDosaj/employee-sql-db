@@ -6,7 +6,7 @@ interface GetEmployeeProps {
     filters?: { [key: string]: string };
 }
 
-export const getAllEmployees = async ({ limit, columns = [], filters = {} }: GetEmployeeProps) => {
+export const getFilteredEmployees = async ({ limit, columns = [], filters = {} }: GetEmployeeProps) => {
 
     let query = `SELECT ${columns.join(", ")} FROM employees`;
     let queryParams: any[] = [];
@@ -41,3 +41,16 @@ export const getAllEmployees = async ({ limit, columns = [], filters = {} }: Get
         throw new Error("Error fetching employees");
     }
 };
+
+export const getEmployee = async (id: number) => {
+
+    let queryParam: any[] = []
+    let query = `SELECT * FROM employees WHERE emp_no = ?`
+
+    queryParam.push(id)
+
+    console.log("Param: ", queryParam)
+
+    const [rows] = await pool.query(query, queryParam)
+    return rows
+}

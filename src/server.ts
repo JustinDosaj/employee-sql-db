@@ -20,8 +20,8 @@ app.get('/', (req: Request, res: Response) => {
     res.send("Backend is running!")
 })
 
-app.get('/employees', employeeRoutes)
-app.get('/salaries', salaryRoutes)
-app.get('/titles', titleRoutes)
+app.use('/employees', employeeRoutes)
+app.use('/salaries', salaryRoutes)
+app.use('/titles', titleRoutes)
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
