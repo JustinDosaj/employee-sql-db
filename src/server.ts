@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import "./db";
 import employeeRoutes from './routes/employees.routes';
 import salaryRoutes from './routes/salaries.routes';
+import titleRoutes from './routes/titles.routes';
 
 
 dotenv.config()
@@ -21,5 +22,6 @@ app.get('/', (req: Request, res: Response) => {
 
 app.get('/employees', employeeRoutes)
 app.get('/salaries', salaryRoutes)
+app.get('/titles', titleRoutes)
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
