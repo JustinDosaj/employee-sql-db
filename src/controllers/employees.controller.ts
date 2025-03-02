@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getFilteredEmployees } from "../services/employees.service";
-import { getEmployee } from "../services/employees.service";
+import { fetchAllEmployees } from "../services/employees.service";
+import { fetchEmployeeById } from "../services/employees.service";
 
 // Get Employee by filter 
 export const getEmployees = async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ export const getEmployees = async (req: Request, res: Response) => {
             }
         });
 
-        const employees = await getFilteredEmployees({ limit, columns, filters });
+        const employees = await fetchAllEmployees({ limit, columns, filters });
         res.status(200).json({ success: true, data: employees });
 
     } catch (error) {
@@ -37,7 +37,7 @@ export const getEmployeeById = async (req: Request, res: Response) => {
 
         const id = parseInt(req.params.id as string)
         console.log(id)
-        const employee = await getEmployee(id)
+        const employee = await fetchEmployeeById(id)
 
         res.status(200).json({success: true, data: employee})
 
