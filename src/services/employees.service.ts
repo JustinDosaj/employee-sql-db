@@ -52,3 +52,16 @@ export const fetchEmployeeById = async (id: number) => {
     const [rows] = await pool.query(query, queryParam)
     return rows
 }
+
+export const getEmployeeDepartment = async (limit: number, id: number) => {
+
+    let query = `SELECT * FROM dept_emp WHERE emp_no = ? LIMIT ?`
+
+    let queryParams: any[] = []
+
+    queryParams.push(id)
+    queryParams.push(limit)
+
+    const [rows] = await pool.query(query, queryParams)
+    return rows
+}

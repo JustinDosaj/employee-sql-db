@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { fetchAllEmployees } from "../services/employees.service";
-import { fetchEmployeeById } from "../services/employees.service";
+import { fetchAllEmployees, fetchEmployeeById, getEmployeeDepartment } from "../services/employees.service";
 
 // Get Employee by filter 
 export const getEmployees = async (req: Request, res: Response) => {
@@ -36,7 +35,6 @@ export const getEmployeeById = async (req: Request, res: Response) => {
     try {
 
         const id = parseInt(req.params.id as string)
-        console.log(id)
         const employee = await fetchEmployeeById(id)
 
         res.status(200).json({success: true, data: employee})
@@ -46,4 +44,21 @@ export const getEmployeeById = async (req: Request, res: Response) => {
     }
 
 
+}
+
+export const getEmployeeDepartmentHandler = async (req: Request, res: Response) => {
+
+    try {
+        // Query limit because it is after ?
+        // Use params for id because it is in RESTful API path ("/:id")
+        const limit = parseInt(req.query.limit as string) || 10
+        const id = parseInt(req.params.id as string)
+
+        const department = await getEmployeeDepartment(limit, id)
+
+        res.status(200).json({success: true, data: department})
+
+    } catch (error) {
+        res.status(500).json({succes: false, message: "Error retrieving department by employee id"})
+    }
 }
