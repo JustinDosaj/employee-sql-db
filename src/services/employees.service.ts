@@ -1,3 +1,4 @@
+import { QueryResult } from "mysql2";
 import pool from "../db";
 
 interface GetEmployeeProps {
@@ -42,7 +43,7 @@ export const fetchAllEmployees = async ({ limit, columns = [], filters = {} }: G
     }
 };
 
-export const fetchEmployeeById = async (id: number) => {
+export const fetchEmployeeById = async (id: number): Promise<QueryResult> => {
 
     let queryParam: any[] = []
     let query = `SELECT * FROM employees WHERE emp_no = ?`
