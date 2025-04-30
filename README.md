@@ -37,11 +37,9 @@ git clone https://github.com/JustinDosaj/employee-sql-db.git
 
 2. Follow installation instructions to setup [Employees Sample Database](https://dev.mysql.com/doc/employee/en/employees-installation.html)
 
-3. Setup Environment Variables (See Above)
+3. Start MySQL Instance via [MySQL Workbench](https://www.mysql.com/products/workbench/) (Optionally use [Docker](https://www.docker.com/) to manage services)
 
-4. Start MySQL Database via MySQL workbench (Optionally use [Docker](https://www.docker.com/))
-
-5. Start Node Server
+4. Start Node Server
 ```bash
 npm run dev
 ```
